@@ -10,11 +10,10 @@ const App = () => {
     const [bmi, setBMI] = useState(null);
 
     const calculateBMI = (e) => {
-      e.preventDefault();  // Prevents the form from refreshing the page
+      e.preventDefault();  
       let weightInKg = weight;
       let heightInCm = height;
 
-      // Convert units if necessary
       if (weightUnit === 'lbs') {
         weightInKg /= 2.20462;
       }
@@ -38,74 +37,86 @@ const App = () => {
       }
     };
 
+    const isValidInput = () => weight > 0 && height > 0;
+
     return (
       <>
-       
-      <div className="min-h-screen flex items-center justify-center bg-gray-400 ">
-        <div className='text-center'>
-        <h1 className="text-4xl font-bold text-white mb-6">BMI Calculator</h1>
+        <div className="min-h-screen flex items-center justify-center bg-gray-400">
+          <div className='text-center'>
+            <h1 className="text-4xl font-bold text-white mb-6">BMI Calculator</h1>
 
-        <form className="bg-gray-300 p-8 rounded-md shadow-md w-80" onSubmit={calculateBMI}>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Age</label>
-            <input
-              type="number"
-              name="age"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
+            <form className="bg-gray-300 p-8 rounded-md shadow-md w-80" onSubmit={calculateBMI}>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Age</label>
+                <input
+                  type="number"
+                  name="age"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  placeholder="Enter your age"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Weight</label>
+                <input
+                  type="number"
+                  name="weight"
+                  id="weight"
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}  
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  placeholder="Enter your weight"
+                />
+                <select
+                  value={weightUnit}
+                  onChange={(e) => setWeightUnit(e.target.value)}
+                  className="ml-2"
+                >
+                  <option value="kg">Kilograms (kg)</option>
+                  <option value="lbs">Pounds (lbs)</option>
+                </select>
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Height</label>
+                <input
+                  type="number"
+                  name="height"
+                  id="height"
+                  value={height}
+                  onChange={(e) => setHeight(e.target.value)}  
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  placeholder="Enter your height"
+                />
+                <select
+                  value={heightUnit}
+                  onChange={(e) => setHeightUnit(e.target.value)}
+                  className="ml-2"
+                >
+                  <option value="cm">Centimeters (cm)</option>
+                  <option value="ft">Feet (ft)</option>
+                </select>
+              </div>
+
+              <button
+                type="submit"
+                className={`w-full text-white py-2 rounded-md ${isValidInput() ? 'bg-gray-500 hover:bg-gray-600' : 'bg-gray-300'}`}
+                disabled={!isValidInput()}
+              >
+                Submit
+              </button>
+
+              {bmi && (
+                <div className="mt-4">
+                  <p>Your BMI is: <strong>{bmi}</strong></p>
+                  <p>You are classified as: <strong>{scaleBMI()}</strong></p>
+                </div>
+              )}
+            </form>
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Weight</label>
-            <input
-              type="number"
-              name="weight"
-              id="weight"
-              value={weight}
-              onChange={(e) => setWeight(e.target.value)}  
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-            <select
-              value={weightUnit}
-              onChange={(e) => setWeightUnit(e.target.value)}
-              className="ml-2"
-            >
-              <option value="kg">Kilograms (kg)</option>
-              <option value="lbs">Pounds (lbs)</option>
-            </select>
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Height</label>
-            <input
-              type="number"
-              name="height"
-              id="height"
-              value={height}
-              onChange={(e) => setHeight(e.target.value)}  
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-            <select
-              value={heightUnit}
-              onChange={(e) => setHeightUnit(e.target.value)}
-              className="ml-2"
-            >
-              <option value="cm">Centimeters (cm)</option>
-              <option value="ft">Feet (ft)</option>
-            </select>
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-gray-500 text-white py-2 rounded-md hover:bg-gray-600"
-          >
-            Submit
-          </button>
-          {bmi && <p className="mt-4">Your BMI is: {bmi}</p>}
-          {bmi && <p className="mt-3">{scaleBMI()}</p>}
-        </form>
-      </div>
-      </div>
+        </div>
       </>
     );
-  
   };
 
   return <BMICalculator />;
